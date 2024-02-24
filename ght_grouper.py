@@ -6,8 +6,10 @@ __maintainer__ = "Da young Lee"
 __email__ = "dyan.lee717@gmail.com"
 __status__ = "Unofficial"
 
-import sys, os
-import glob, shutil
+import os
+import sys
+import glob
+import shutil
 import pandas as pd
 
 data_dirr = 'GHT_image/'
@@ -15,14 +17,14 @@ data_list = glob.glob(data_dirr+'*.jpg')
 data_len = len(data_list)
 print('》 Image data directory is, "', data_dirr,'"')
 print('》 There are  (',data_len,')  image files in data directory.  \n')
-xlsx_path = 'result.xlsx'
-df = pd.read_excel(xlsx_path,index_col=False, columns = False)
 
+xlsx_path = 'ght2txt_result.xlsx'
+df = pd.read_excel(xlsx_path,index_col=False, columns = False)
 file_name = df['FileName']
 print("》 Please Enter a name of column as criteria for sorting.")
 print("    (If 'KeyError' occurs,")
 print("        check the typed value matches column name.)" )
-col_name = input('Column >>> ')    
+col_name = input('Column >>> ')
 
 
 def mkdir_path(folder_dir):
@@ -35,12 +37,10 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     filledLength = int(round(length * iteration // float(total)))
     bar = fill * filledLength + '-' * (length - filledLength)
-    # print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
     sys.stdout.write('\r%s |%s| %s%s %s' % (prefix, bar, percent, '%', suffix))#, end = '\r')
     # Print New Line on Complete
     if iteration == total: 
         sys.stdout.write('\n')
-        # print()
     sys.stdout.flush()
 
 
@@ -49,7 +49,7 @@ print('》 Grouping images... ')
 target_col = df[col_name]
 for i, value in enumerate(target_col):   
     gr_dir = os.path.join(data_dirr+value+'\\')
-    os.makedirs(gr_dir, exist_ok=True)    
+    os.makedirs(gr_dir, exist_ok=True)
     shutil.copy(data_dirr+file_name[i], gr_dir+file_name[i])
     printProgressBar(i, len(target_col)-1, 'Sorting: ', 'Complete!', 1, 60)
     if data_len-i-1 == 0:
